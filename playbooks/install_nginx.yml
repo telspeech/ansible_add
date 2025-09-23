@@ -1,0 +1,73 @@
+---
+- name: Install and configure Nginx on Ubuntu (vm-terraform)
+  hosts: vm-terraform
+  become: yes
+  vars:
+    # Настройки виртуального хоста
+    server_name: example.local
+    document_root: /var/www/html
+    index_file: index.html
+    # Путь к кастомному конфигу сайта (можно использовать по умолчанию /etc/nginx/sites-available/default)
+    site_config_path: /etc/nginx/sites-available/default
+  tasks:
+    - name: Ensure apt cache is up to date
+      apt:
+        update_cache: yes
+        cache_valid_time: 3600
+
+    - name: Install Nginx
+      apt:
+        name: nginx
+        state: present
+        update_cache: yes
+
+    - name: Ensure document root directory exists
+      file:
+        path: "{{ document_root }}"
+        state: directory
+        owner: www-data
+        group: www-data
+        mode: '0755'
+
+    - name: Create a simple index.html
+      copy:
+        dest: "{{ document_root }}/{{ index_file }}"
+        content: |
+          <html>
+            <head><title>Welcome</title></head>
+            <body>
+              <h1>Welcome to Nginx on Ubuntu via Ansible</h1>
+            </body>
+          </html>
+        owner: www-data
+        group: www-data
+        mode: '0644'
+
+    - name: Configure default server block
+      blockinfile:
+        path: "{{ site_config_path }}"
+        block: |
+          server {
+              listen 80 default_server;
+              listen [::]:80 default_server;
+
+              server_name {{ server_name }};
+
+              root {{ document_root }};
+              index {{ index_file }};
+
+              location / {
+                  try_files $uri $uri/ =404;
+              }
+
+              access_log /var/log/nginx/access.log;
+              error_log /var/log/nginx/error.log;
+          }
+      notify: Reload Nginx
+
+    - name: Ensure Nginx is enabled and started
+      service:
+        name: nginx
+        state: started
+        enabled: yes
+...
