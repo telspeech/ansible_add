@@ -1,8 +1,0 @@
-all:
-  hosts:
-    vm-terraform:
-      ansible_host: 89.169.187.242
-      ansible_user: korotkov
-#    vm-ansible:
-#      ansible_host: 158.160.29.195
-#      ansible_user: korotkov
