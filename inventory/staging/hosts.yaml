@@ -1,0 +1,5 @@
+all:
+  hosts:
+    vm-staging:
+      staging_host: 89.169.187.242
+      staging_user: korotkov

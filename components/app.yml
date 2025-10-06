@@ -1,0 +1,21 @@
+- name: Deploy application
+  hosts: all
+  become: yes
+  tasks:
+    - name: Copy application files
+      copy:
+        src: "/local/path/app-{{ item.version }}.tar.gz"
+        dest: "/opt/app/"
+      loop: "{{ components }}"
+      
+    - name: Extract application archive
+      unarchive:
+        src: "/opt/app/app-{{ item.version }}.tar.gz"
+        dest: "/opt/app/"
+        remote_src: yes
+      loop: "{{ components }}"
+      
+    - name: Restart application service
+      systemd:
+        name: app.service
+        state: restarted

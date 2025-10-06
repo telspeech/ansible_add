@@ -1,0 +1,12 @@
+---
+- name: Проверка связи и создание файла
+  hosts: all
+  tasks:
+    - name: Ping хостов
+      ansible.builtin.ping:
+
+    - name: Создать файл /tmp/hello.txt
+      ansible.builtin.copy:
+        content: "Привет от Ansible! Этот текст из playbook"
+        dest: /tmp/hello.txt 
+...

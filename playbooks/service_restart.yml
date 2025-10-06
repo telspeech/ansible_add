@@ -1,0 +1,7 @@
+---
+- name: Перезапустить службу
+  systemd:
+   name: nginx
+   state: restarted
+   daemon_reload: yes
+...

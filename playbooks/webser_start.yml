@@ -1,0 +1,10 @@
+---
+- name: Запустить и включить nginx
+  host: all
+  gather_facts: true
+  tasks:
+    - name: Старт бслужбы с systemd
+      systemd: 
+      name: nginx
+      state: started
+...

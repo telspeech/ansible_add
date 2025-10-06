@@ -1,0 +1,19 @@
+- name: Deploy database
+  hosts: all
+  become: yes
+  tasks:
+    - name: Install database package
+      apt:
+        name: postgresql
+        state: present
+      when: ansible_os_family == "Debian"
+      
+    - name: Configure database
+      template:
+        src: "templates/postgresql.conf.j2"
+        dest: "/etc/postgresql/postgresql.conf"
+      
+    - name: Restart database service
+      systemd:
+        name: postgresql
+        state: restarted

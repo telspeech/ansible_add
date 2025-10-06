@@ -1,0 +1,5 @@
+all:
+  hosts:
+    vm-production:
+      production_host: 158.160.29.195
+      production_user: korotkov

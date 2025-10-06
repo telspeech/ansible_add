@@ -1,0 +1,36 @@
+---
+- name: Настройка пользователя developer
+  hosts: all
+  become: yes
+  tasks:
+    - name: Создать пользователя developer
+      user:
+        name: developer
+        uid: 1001
+        group: www-data
+        create_home: yes
+
+    - name: Создать директорию logs
+      file:
+        path: /home/developer/logs
+        state: directory
+
+
+    - name: Создать welcome-файл
+      copy:
+        content: "Добро пожаловать, developer!"
+        dest: /home/developer/welcome.txt
+
+    - name: Обновления кеш пакетов
+      apt:
+        update_cache: yes
+        cache_valid_time: 3600
+
+    - name: Установить htop на Debian-системах
+      apt:
+        name: htop
+        state: present
+        update_cache: yes
+      when: ansible_os_family == "Debian"
+
+...

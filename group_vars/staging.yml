@@ -1,0 +1,5 @@
+components:
+  - name: app
+    version: "1.0"
+  - name: db
+    version: "1.0"

@@ -1,0 +1,5 @@
+components:
+  - name: app
+    version: "2.0"
+  - name: cache
+    version: "2.0"
